@@ -20,6 +20,10 @@ public class HeadScript : MonoBehaviour,  IPositionTeller{
 	public float GetSpeed(){return this.speed;}
 	public float GetGrid(){return this.gridSize;}
 	public float GetRotationDamping(){return this.rotDamping;}
+
+	public Quaternion GetDestRot(){
+		return this.destRot;
+	}
 	
 	// Use this for initialization
 	void Start () {
@@ -55,15 +59,18 @@ public class HeadScript : MonoBehaviour,  IPositionTeller{
 
 		} else {
 			switch(lastKey){
-			case KeyCode.UpArrow: destPos = transform.TransformPoint(0, -gridSize, 0);break;
-			case KeyCode.DownArrow: destPos = transform.TransformPoint(0, gridSize, 0);break;
-			case KeyCode.LeftArrow: destPos = transform.TransformPoint(-gridSize, 0, 0);break;
-			case KeyCode.RightArrow: destPos = transform.TransformPoint(gridSize, 0, 0);break;
+			case KeyCode.UpArrow: destPos = transform.TransformPoint(0, -gridSize, 0);
+				destRot = Quaternion.LookRotation(destPos - transform.position, transform.forward);break;
+			case KeyCode.DownArrow: destPos = transform.TransformPoint(0, gridSize, 0);
+				destRot = Quaternion.LookRotation(destPos - transform.position, -transform.forward);break;
+			case KeyCode.LeftArrow: destPos = transform.TransformPoint(-gridSize, 0, 0);
+				destRot = Quaternion.LookRotation(destPos - transform.position, transform.up);break;
+			case KeyCode.RightArrow: destPos = transform.TransformPoint(gridSize, 0, 0);
+				destRot = Quaternion.LookRotation(destPos - transform.position, transform.up);break;
 			default: destPos = transform.TransformPoint(0, 0, gridSize);break;
 			}
 
 			lastKey = KeyCode.None;
-			destRot = Quaternion.LookRotation(destPos - transform.position);
 
 			arrived = false;
 		}

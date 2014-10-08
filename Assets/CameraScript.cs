@@ -9,9 +9,11 @@ public class CameraScript : MonoBehaviour {
 	public float posDamping;
 	public float rotDamping;
 
+	private HeadScript headScript;
+
 	// Use this for initialization
 	void Start () {
-		
+		headScript = star.GetComponent<HeadScript> ();
 	}
 	
 	// Update is called once per frame
@@ -19,7 +21,7 @@ public class CameraScript : MonoBehaviour {
 		var posToBe = star.TransformPoint (0, height, -distance);
 		transform.position = Vector3.Lerp (transform.position, posToBe, Time.deltaTime * posDamping);
 
-		var rotToBe = Quaternion.LookRotation (star.position - transform.position);
+		var rotToBe = headScript.GetDestRot ();
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotToBe, Time.deltaTime * rotDamping);
 	}
 }
